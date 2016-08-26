@@ -5,12 +5,17 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
 coords = [
   [37.753817, -122.463358],
   [37.753274, -122.420786],
   [37.762265, -122.411534],
   [37.791870, -122.393281]
 ]
+
+25.times do
+  coords.push([( 37 + rand ), ( 122 + rand )])
+end
 
 coords.each do |coord|
   Bench.create!(lat: coord[0], lng: coord[1], description: Faker::Hipster.sentence(3));
