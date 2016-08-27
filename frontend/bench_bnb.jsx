@@ -11,6 +11,7 @@ import {fetchBenches} from './util/bench_api_util';
 document.addEventListener('DOMContentLoaded', ( ) => {
   window.fetchBenches = fetchBenches;
   let store = configureStore();
+  window.Store = store;
   window.Actions = Actions //TODO: TESTING TAKE OUT
   const root = document.getElementById('root');
   ReactDOM.render(

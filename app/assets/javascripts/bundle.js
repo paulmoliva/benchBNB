@@ -78,6 +78,7 @@
 	document.addEventListener('DOMContentLoaded', function () {
 	  window.fetchBenches = _bench_api_util.fetchBenches;
 	  var store = (0, _store2.default)();
+	  window.Store = store;
 	  window.Actions = Actions; //TODO: TESTING TAKE OUT
 	  var root = document.getElementById('root');
 	  _reactDom2.default.render(_react2.default.createElement(_root2.default, { store: store }), root);
@@ -23358,7 +23359,7 @@
 	  return _react2.default.createElement(
 	    'div',
 	    null,
-	    _react2.default.createElement(_bench_map2.default, null),
+	    _react2.default.createElement(_bench_map2.default, { benches: benches }),
 	    _react2.default.createElement(_bench_index2.default, { benches: benches, requestBenches: requestBenches })
 	  );
 	};
@@ -23381,6 +23382,10 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _marker_manager = __webpack_require__(208);
+	
+	var _marker_manager2 = _interopRequireDefault(_marker_manager);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -23392,13 +23397,39 @@
 	var BenchMap = function (_React$Component) {
 	  _inherits(BenchMap, _React$Component);
 	
-	  function BenchMap(props) {
+	  function BenchMap() {
 	    _classCallCheck(this, BenchMap);
 	
-	    return _possibleConstructorReturn(this, (BenchMap.__proto__ || Object.getPrototypeOf(BenchMap)).call(this, props));
+	    return _possibleConstructorReturn(this, (BenchMap.__proto__ || Object.getPrototypeOf(BenchMap)).apply(this, arguments));
 	  }
 	
 	  _createClass(BenchMap, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      // find the `<map>` node on the DOM
+	      var mapDOMNode = this.refs.map;
+	
+	      // set the map to show SF
+	      var mapOptions = {
+	        center: { lat: 37.7758, lng: -122.435 }, // this is SF
+	        zoom: 13
+	      };
+	
+	      // wrap the mapDOMNode in a Google Map
+	      this.map = new google.maps.Map(mapDOMNode, mapOptions);
+	      this.map = new google.maps.Map(mapDOMNode, mapOptions);
+	      this.MarkerManager = new _marker_manager2.default(this.map);
+	      this.MarkerManager.updateMarkers(this.props.benches);
+	    }
+	  }, {
+	    key: 'componentWillUpdate',
+	    value: function componentWillUpdate() {
+	      console.log(this);
+	      console.log(this.props);
+	      console.log(this.props.benches);
+	      this.MarkerManager.updateMarkers(this.props.benches);
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement('div', { id: 'map-container', ref: 'map' });
@@ -23409,6 +23440,46 @@
 	}(_react2.default.Component);
 	
 	exports.default = BenchMap;
+
+/***/ },
+/* 208 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var MarkerManager = function () {
+	  function MarkerManager(map) {
+	    _classCallCheck(this, MarkerManager);
+	
+	    this.map = map;
+	    this.markers = [];
+	  }
+	
+	  _createClass(MarkerManager, [{
+	    key: "updateMarkers",
+	    value: function updateMarkers(benches) {
+	      console.log(benches);
+	      console.log(benches.props);
+	    }
+	  }, {
+	    key: "_benchesToAdd",
+	    value: function _benchesToAdd(benches) {
+	      var result = [];
+	    }
+	  }]);
+	
+	  return MarkerManager;
+	}();
+	
+	exports.default = MarkerManager;
 
 /***/ }
 /******/ ]);
