@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import configureStore from './store/store';
+import {Provider} from 'react-redux';
 
 //TESTING
 import * as Actions from './actions/bench_actions';
