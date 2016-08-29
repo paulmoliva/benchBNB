@@ -14,9 +14,12 @@ coords = [
 ]
 
 25.times do
-  coords.push([( 37 + rand ), ( 122 + rand )])
+  randCor = [( 37+ (rand * 0.1 ).round(6)), ( -122.47 - (rand * 0.065) ).round(6)]
+  puts randCor
+  coords.push(randCor)
 end
 
 coords.each do |coord|
-  Bench.create!(lat: coord[0], lng: coord[1], description: Faker::Hipster.sentence(3));
+  Bench.create!(lat: coord[0].round(6), lng: coord[1].round(6), description: Faker::Hipster.sentence(3));
+  puts coord
 end

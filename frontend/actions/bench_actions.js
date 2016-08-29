@@ -3,9 +3,10 @@ export const BENCH_CONSTANTS = {
   REQUEST_BENCHES: 'REQUEST_BENCHES'
 };
 
-export const requestBenches = () => {
+export const requestBenches = (filter) => {
   return {
-    type: BENCH_CONSTANTS.REQUEST_BENCHES
+    type: BENCH_CONSTANTS.REQUEST_BENCHES,
+    filter: filter
   };
 };
 

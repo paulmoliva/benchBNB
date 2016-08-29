@@ -6,7 +6,8 @@ const BenchesMiddleWare = ({getState, dispatch}) => next => action => {
   switch (action.type) {
     case BENCH_CONSTANTS.REQUEST_BENCHES:
       const success = data => dispatch(receiveBenches(data));
-      fetchBenches(success);
+      const filter = action.filter;
+      fetchBenches(success, filter);
       return next(action);
     default:
       return next(action);
