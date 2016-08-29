@@ -10,14 +10,14 @@ coords = [
   [37.753817, -122.463358],
   [37.753274, -122.420786],
   [37.762265, -122.411534],
-  [37.791870, -122.393281]
+  [37.798570, -122.397281],
+  [37.732817, -122.463858],
+  [37.759274, -122.420786],
+  [37.720365, -122.411694],
+  [37.766970, -122.299681]
 ]
 
-25.times do
-  randCor = [( 37+ (rand * 0.1 ).round(6)), ( -122.47 - (rand * 0.065) ).round(6)]
-  puts randCor
-  coords.push(randCor)
-end
+
 
 coords.each do |coord|
   Bench.create!(lat: coord[0].round(6), lng: coord[1].round(6), description: Faker::Hipster.sentence(3));

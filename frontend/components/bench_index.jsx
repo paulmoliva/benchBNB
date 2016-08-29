@@ -2,7 +2,6 @@ import React from 'react';
 import * as Actions from '../actions/bench_actions';
 export default class BenchIndex extends React.Component {
   componentDidMount() {
-    this.props.requestBenches();
   }
 
   render() {

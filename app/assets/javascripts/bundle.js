@@ -22385,10 +22385,10 @@
 	  REQUEST_BENCHES: 'REQUEST_BENCHES'
 	};
 	
-	var requestBenches = exports.requestBenches = function requestBenches(filter) {
+	var requestBenches = exports.requestBenches = function requestBenches(filters) {
 	  return {
 	    type: BENCH_CONSTANTS.REQUEST_BENCHES,
-	    filter: filter
+	    filters: filters
 	  };
 	};
 	
@@ -22435,6 +22435,8 @@
 	
 	var _bench_api_util = __webpack_require__(192);
 	
+	var _filter_actions = __webpack_require__(208);
+	
 	var BenchesMiddleWare = function BenchesMiddleWare(_ref) {
 	  var getState = _ref.getState;
 	  var dispatch = _ref.dispatch;
@@ -22445,9 +22447,12 @@
 	          var success = function success(data) {
 	            return dispatch((0, _bench_actions.receiveBenches)(data));
 	          };
-	          var filter = action.filter;
-	          (0, _bench_api_util.fetchBenches)(success, filter);
+	          var filters = getState();
+	          (0, _bench_api_util.fetchBenches)(success, filters);
 	          return next(action);
+	        case _filter_actions.FILTER_CONSTANTS.UPDATE_BOUNDS:
+	          next(action);
+	          dispatch((0, _bench_actions.requestBenches)(filters));
 	        default:
 	          return next(action);
 	      }
@@ -23272,9 +23277,7 @@
 	
 	  _createClass(BenchIndex, [{
 	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      this.props.requestBenches();
-	    }
+	    value: function componentDidMount() {}
 	  }, {
 	    key: 'render',
 	    value: function render() {
@@ -23500,6 +23503,10 @@
 	        benchesToAdd.forEach(function (bench) {
 	          return _this._createMarkerFromBench(bench);
 	        });
+	        var markersToRemove = this._markersToRemove();
+	        markersToRemove.forEach(function (marker) {
+	          _this._removeMarker(marker);
+	        });
 	      }
 	    }
 	  }, {
@@ -23507,7 +23514,6 @@
 	    value: function _benchesToAdd(benches) {
 	      var _this2 = this;
 	
-	      debugger;
 	      if (benches) {
 	        var keys = Object.keys(benches);
 	        var benchesMappedtoCoords = keys.map(function (el) {
@@ -23515,8 +23521,7 @@
 	        });
 	
 	        var result = benchesMappedtoCoords.filter(function (el) {
-	          // if (!(el[0] > sw.lat && el[1] > sw.lng && el[0] < ne.lat && el[1] < ne.lat))
-	          // return true;
+	
 	          if (_this2.markers.includes([el.lat, el.lng])) {
 	            return false;
 	          } else {
@@ -23536,6 +23541,35 @@
 	        title: 'Hello World!'
 	      });
 	      this.markers.push(marker);
+	    }
+	  }, {
+	    key: '_markersToRemove',
+	    value: function _markersToRemove(benches) {
+	      var _this3 = this;
+	
+	      var result = [];
+	      if (benches) {
+	        var keys = Object.keys(benches);
+	        var benchesMappedtoCoords = keys.map(function (el) {
+	          return [benches[el].lat, benches[el].lng];
+	        });
+	        result = benchesMappedtoCoords.filter(function (el) {
+	
+	          if (_this3.markers.includes([el.lat, el.lng])) {
+	            return true;
+	          } else {
+	            return false;
+	          }
+	        });
+	        return result;
+	      }
+	      return result;
+	    }
+	  }, {
+	    key: '_removeMarker',
+	    value: function _removeMarker(marker) {
+	      marker.setMap(null);
+	      this.markers.splice(this.markers.indexOf(marker), 1);
 	    }
 	  }]);
 	

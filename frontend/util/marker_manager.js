@@ -9,11 +9,14 @@ class MarkerManager {
       let benchesToAdd = this._benchesToAdd(benches);
       console.log(benchesToAdd);
       benchesToAdd.forEach( (bench) => this._createMarkerFromBench(bench) );
+      let markersToRemove = this._markersToRemove();
+      markersToRemove.forEach ( (marker) => {
+        this._removeMarker(marker);
+      } );
     }
   }
 
   _benchesToAdd(benches){
-    debugger;
     if (benches){
       let keys = Object.keys(benches);
       let benchesMappedtoCoords = keys.map ( (el) => {
@@ -21,8 +24,7 @@ class MarkerManager {
       });
 
       let result = benchesMappedtoCoords.filter( (el) => {
-        // if (!(el[0] > sw.lat && el[1] > sw.lng && el[0] < ne.lat && el[1] < ne.lat))
-        // return true;
+
         if(this.markers.includes([el.lat, el.lng])){
           return false;
         }
@@ -44,6 +46,31 @@ class MarkerManager {
     this.markers.push(marker);
   }
 
+  _markersToRemove(benches){
+    let result = [];
+    if (benches){
+      let keys = Object.keys(benches);
+      let benchesMappedtoCoords = keys.map ( (el) => {
+        return [benches[el].lat, benches[el].lng];
+      });
+      result = benchesMappedtoCoords.filter( (el) => {
+
+        if(this.markers.includes([el.lat, el.lng])){
+          return true;
+        }
+        else{
+          return false;
+        }
+      });
+      return result;
+    }
+    return result;
+  }
+
+  _removeMarker(marker){
+    marker.setMap(null);
+    this.markers.splice(this.markers.indexOf(marker), 1);
+  }
 }
 
 
